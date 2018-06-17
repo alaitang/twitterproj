@@ -29,7 +29,7 @@ class App extends Component {
     });
     var params = {screen_name: this.state.searchtxt};
     
-    client.get('statuses/user_timeline', params, ((error, tweets, response)=> {
+    client.get('statuses/user_timeline', {screen_name: this.state.searchtxt,exclude_replies:false}, ((error, tweets, response)=> {
       if (!error) {
         console.log(tweets);
         this.setState({
@@ -69,7 +69,7 @@ class App extends Component {
       access_token_secret: 'A589dOT1tHy6U6DMRX2XROXhQTp3e8D5rGh5ypv97hKld'
     });
 
-    client.get('statuses/show', {id:id}, ((error, data, response)=> {
+    client.get('statuses/show', {id:id,exclude_replies:false}, ((error, data, response)=> {
       if (!error) {
         console.log(data);
         
@@ -80,9 +80,14 @@ class App extends Component {
   render() {
     
     const tweetsList = this.state.tweets.map((t) =>
-        <div key={t.id} className="tweetItem">
-         <button onClick={()=>{this.showTweet(t.id_str)}}>show</button> {t.created_at} - like Count : {t.favorite_count} - retweet count {t.retweet_count} - {t.text}
-        </div>
+
+    <tr key={t.id}>
+    <td>{t.created_at}</td>
+    <td>{t.favorite_count}</td>
+    <td>{t.retweet_count}</td>
+    <td>{t.text}</td>
+      </tr>
+
       )
 
     return (
@@ -104,7 +109,20 @@ class App extends Component {
             <tr key="t_img"> <td>profile: </td><td> <img src={this.state.user.imageUrl} alt=""></img> </td> </tr></tbody>
             </table>
            
+
+           <table>
+             
+            <tbody>
+            <tr>
+                 <td><b>created on</b></td>
+                 <td><b>Like</b></td>
+                 <td><b>Retweet</b></td>
+                 <td><b>text</b></td>
+               </tr>
             {tweetsList}
+            </tbody>
+            </table>
+            
           </div>
       </div>
     );
